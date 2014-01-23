@@ -1,0 +1,137 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>nba</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <!-- build:css(.tmp) styles/main.css -->
+        <link rel="stylesheet" href="styles/main.css">
+        <!-- endbuild -->
+        <!-- build:js scripts/vendor/modernizr.js -->
+        <script src="bower_components/modernizr/modernizr.js"></script>
+        <!-- endbuild -->
+
+        <style>
+          .tooltip {
+            position: absolute;
+            opacity: 0;
+            z-index: -100;
+            left: 0;
+            top: 0;
+            background: rgba(255,255,255,.75);
+            padding: 0 1rem;
+            font-family: sans-serif;
+          }
+          .tooltip:hover {
+          }
+          .tooltip span {
+            font-weight: bold;
+          }
+          .cf:before,
+          .cf:after {
+            content: " "; /* 1 */
+            display: table; /* 2 */
+          }
+
+          .cf:after {
+            clear: both;
+          }
+
+          .shot-column {
+            float: left;
+            width: 1rem;
+            margin: 0 !important;
+          }
+
+          .shot-cell {
+            height: 1rem;
+          }
+
+          /* inspired by http://jtauber.github.io/articles/css-hexagon.html */
+          /* 
+          .shots > div {
+            margin-top: 1px;
+          }
+          .shots > div:nth-of-type(even) {
+            margin-left: -9.166666px;
+          }
+          .shot-row {
+            display: flex;
+          }
+          .shot-cell {
+            margin-top: 5px;
+            margin-right: 1px;
+            width: 17.333333px;
+            height: 10px;
+            position: relative;
+            border-top-color: transparent;
+            border-bottom-color: transparent;
+          }
+          .shot-cell:before,
+          .shot-cell:after {
+            content: "";
+            width: 0;
+            height: 0;
+            position: absolute;
+            border-left: 8.666666px solid transparent;
+            border-right: 8.666666px solid transparent;
+          }
+          .shot-cell:before {
+            top: -5px;
+            border-bottom: 5px solid;
+            border-bottom-color: inherit;
+          }
+          .shot-cell:after {
+            bottom: -5px;
+            border-top: 5px solid;
+            border-top-color: inherit;
+          } */
+
+        </style>
+
+    </head>
+    <body>
+      <!--[if lt IE 10]>
+          <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+      <![endif]-->
+
+
+      <div class="hero-unit">
+        <h1>'Allo, 'Allo!</h1>
+        <p>You now have</p>
+        <ul>
+          <li>HTML5 Boilerplate</li>
+          <li>jQuery</li>
+          <li>Backbone.js</li>
+          <li>Underscore.js</li>
+          <li>Modernizr</li>
+
+        </ul>
+      </div>
+      
+      <!-- build:js scripts/vendor.js -->
+      <script src="bower_components/jquery/jquery.js"></script>
+      <script src="bower_components/underscore/underscore.js"></script>
+      <script src="bower_components/backbone/backbone.js"></script>
+      <script src="bower_components/backbone.wreqr/lib/backbone.wreqr.js"></script>
+      <script src="bower_components/d3/d3.js"></script>
+      <!-- endbuild -->
+
+      <script src="scripts/vendor/d3.hexbin.js"></script>
+      <script src="scripts/vendor/rainbow-vis.js"></script>
+
+      <!-- build:js({.tmp,app}) scripts/main.js -->
+      <script src="scripts/oops.js"></script>
+      <script src="scripts/main.js"></script>
+      <script src="scripts/lastSeasonShooting.js"></script>
+        
+        <!-- <script src="scripts/templates.js"></script> -->
+        <!-- endbuild -->
+</body>
+</html>
