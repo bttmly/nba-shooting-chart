@@ -205,9 +205,7 @@ window.NBA = do ->
         'PlayerExperience': ''
         'PlayerPosition': ''
         'StarterBench': ''
-        # 'callback': 'jsonpCallback'
 
-    # data for team roster JSONP requests.
     eachTeamAjax:
       url : "http://stats.nba.com/stats/commonteamroster/"
       callback: "jsonpCallback"
@@ -215,7 +213,6 @@ window.NBA = do ->
         'Season': '2013-14'
         'LeagueID': '00'
         'TeamID': ''
-        # 'callback': 'NBA.oneTeamJsonpCallback'
 
     # data for shot chart JSONP requests.
     shotChartAjax:
@@ -279,7 +276,6 @@ window.NBA = do ->
         'StarterBench': ''
         'pageNo': '1'
         'rowsPerPage':'0'
-        # 'callback': 'NBA.lineupJsonpCallback'
 
     # sportsVu data files
     # these are regular JS files so we can load them with $.getScript and not worry about cross-domain issues (yay)

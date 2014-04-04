@@ -7,7 +7,8 @@
     rainbow = new Rainbow();
     rainbow.setSpectrum('#3498db', '#2ecc71', '#f1c40f', '#e67e22', '#e74c3c');
     rainbow.setNumberRange(.25, 1.75);
-    bins = new Collection(JSON.parse(rawBins));
+    bins = new Collection(rawBins);
+    console.log(bins);
     stage = new Kinetic.Stage({
       container: "kinetic-wrapper",
       width: 1000,

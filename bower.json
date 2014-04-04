@@ -27,6 +27,7 @@
     "fabric": "~1.4.4",
     "collection.js": "https://github.com/nickb1080/collection.js.git",
     "kineticjs": "~5.1.0",
-    "easeljs": "*"
+    "easeljs": "*",
+    "underscore.string": "~2.3.3"
   }
 }
