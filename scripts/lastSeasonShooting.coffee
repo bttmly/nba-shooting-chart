@@ -80,8 +80,8 @@ window.ps =
 
   #     console.log "DONE!"
 
-  # collectify : ( headers, arrays ) ->
-  #   _.object( headers, array ) for array in arrays
+  collectify : ( headers, arrays ) ->
+    _.object( headers, array ) for array in arrays
 
   bin : ( collection, xProp, yProp, size, byRow ) ->
     # _collection = new Backbone.Collection( collection )
@@ -288,7 +288,7 @@ window.ps =
         zIndex: -100
 
 
-ps.getShootingData()
+# ps.getShootingData()
 
 
 

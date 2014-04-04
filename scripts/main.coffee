@@ -15,6 +15,7 @@ window.NBA = do ->
       data = $.extend {}, ajax.data, 
         PlayerID: this.get( "PLAYER_ID" )
         TeamID: 0
+        
       $.ajax
         type: "GET"
         url: ajax.url
@@ -565,7 +566,7 @@ window.NBA = do ->
 
 $ ->
 
-  NBA.init()
+  # NBA.init()
 
 
 # https://github.com/bgrins/devtools-snippets/blob/master/snippets/console-save/console-save.js

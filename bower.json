@@ -1,0 +1,32 @@
+{
+  "name": "nba-shooting-chart",
+  "version": "0.1.0",
+  "homepage": "https://github.com/nickb1080/nba-shooting-chart",
+  "authors": [
+    "Nick Bottomley <nhbottomley@gmail.com>"
+  ],
+  "description": "Spatial map of NBA shots",
+  "main": "index.html",
+  "keywords": [
+    "NBA",
+    "basketball"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.0",
+    "lodash": "~2.4.1",
+    "fabric": "~1.4.4",
+    "collection.js": "https://github.com/nickb1080/collection.js.git",
+    "kineticjs": "~5.1.0",
+    "easeljs": "*"
+  }
+}

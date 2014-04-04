@@ -1,0 +1,36 @@
+{
+  "name": "collection.js",
+  "main": "collection.js",
+  "homepage": "https://github.com/nickb1080/collection.js",
+  "authors": [
+    "Nick Bottomley <nhbottomley@gmail.com>"
+  ],
+  "description": "class w/ lodash/underscore collection fn's in prototype",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "collection"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "ef0b883234",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "ef0b88323411fc99627a56bccb68b8ad6abcb404"
+  },
+  "_source": "https://github.com/nickb1080/collection.js.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/nickb1080/collection.js.git",
+  "_direct": true
+}
