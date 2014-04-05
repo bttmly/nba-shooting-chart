@@ -4,18 +4,35 @@
 
   App.fns = {
     buildPlayerList: function() {
-      var player, team, _i, _j, _len, _len1, _ref, _ref1;
-      App.allPlayers = [];
-      _ref = App.league.teams;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        team = _ref[_i];
-        _ref1 = team.players;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          player = _ref1[_j];
-          App.allPlayers.push(player);
+      var $select, html, player, team, _i, _j, _len, _len1, _ref, _ref1;
+      if (App.league.teams.every("players")) {
+        App.allPlayers = [];
+        _ref = App.league.teams;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          team = _ref[_i];
+          _ref1 = team.players;
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            player = _ref1[_j];
+            player.name = player.player;
+            App.allPlayers.push(player);
+          }
         }
+        App.allPlayers = new Collection(App.allPlayers);
+        html = "<select id='player-select' class='player-select'>";
+        App.allPlayers.each(function(p) {
+          return html += "<option value='" + p.playerId + "'>" + p.name + "</option>";
+        });
+        html += "</select>";
+        return $select = $(html).prependTo($("body")).on("change", function(event) {
+          console.log(this.value);
+          player = App.allPlayers.findWhere({
+            playerId: parseInt(this.value, 10)
+          });
+          return player.getPlayerShots().then(function(player) {
+            return player.drawShootingChart();
+          });
+        });
       }
-      return App.allPlayers = new Players(App.allPlayers);
     }
   };
 

@@ -35,6 +35,26 @@
       })(this));
     };
 
+    League.prototype.getLeaguePlayerData = function() {
+      return App.ajax.getLeaguePlayerData();
+    };
+
+    League.prototype.getLeagueShots = function() {
+      return App.ajax.getLeagueShots(this);
+    };
+
+    League.prototype.getLeagueSportVuData = function() {
+      return App.ajax.getLeagueSportVuData();
+    };
+
+    League.prototype.drawLeagueShootingChart = function() {
+      if (this.binnedShots) {
+        return App.drawChart(this.binnedShots);
+      } else {
+        throw new Error("League has no shots to chart.");
+      }
+    };
+
     return League;
 
   })(Model);
@@ -50,9 +70,7 @@
       return App.ajax.getTeamPlayers(this.teamId).then((function(_this) {
         return function(players) {
           _this.players = new Players(players);
-          if (App.league.teams.every("players")) {
-            App.fns.buildPlayerList();
-          }
+          App.fns.buildPlayerList();
           return _this;
         };
       })(this));
@@ -70,12 +88,15 @@
     }
 
     Player.prototype.getPlayerShots = function() {
-      return App.ajax.getPlayerShots(this.playerId).then((function(_this) {
-        return function(shots) {
-          _this.shots = new Shots(shots);
-          return _this;
-        };
-      })(this));
+      return App.ajax.getPlayerShots(this);
+    };
+
+    Player.prototype.drawShootingChart = function() {
+      if (this.binnedShots) {
+        return App.drawChart(this.binnedShots);
+      } else {
+        throw new Error("Player has no shots to chart.");
+      }
     };
 
     return Player;

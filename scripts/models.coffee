@@ -11,22 +11,39 @@ App.League = class League extends Model
       this.teams = new Teams( teams )
       return this
 
+  getLeaguePlayerData : ->
+    App.ajax.getLeaguePlayerData()
+
+  getLeagueShots : ->
+    App.ajax.getLeagueShots( this )
+
+  getLeagueSportVuData : ->
+    App.ajax.getLeagueSportVuData()
+
+  drawLeagueShootingChart : ->
+    if this.binnedShots
+      App.drawChart( this.binnedShots )
+    else
+      throw new Error "League has no shots to chart."
+
+
 App.Team = class Team extends Model
   getTeamPlayers : ->
     App.ajax.getTeamPlayers( this.teamId ).then ( players ) =>
       this.players = new Players( players )
-
-      # this is kind of yucky
-      if App.league.teams.every( "players" )
-        App.fns.buildPlayerList()
-
+      App.fns.buildPlayerList()
       return this
 
 App.Player = class Player extends Model
   getPlayerShots : ->      
-      App.ajax.getPlayerShots( this.playerId ).then ( shots ) =>
-        this.shots = new Shots( shots )
-        return this
+    App.ajax.getPlayerShots( this )
+
+  drawShootingChart : ->
+    if this.binnedShots
+      App.drawChart( this.binnedShots )
+    else
+      throw new Error "Player has no shots to chart."
+
 
 App.Shot = class Shot extends Model
 

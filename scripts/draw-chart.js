@@ -2,43 +2,53 @@
 (function() {
   window.App || (window.App = {});
 
-  App.drawChart = function(canvasId, rawBins) {
+  App.drawChart = function(rawBins) {
     var $output, bins, layer, rainbow, stage;
+    bins = new Collection(rawBins);
     rainbow = new Rainbow();
     rainbow.setSpectrum('#3498db', '#2ecc71', '#f1c40f', '#e67e22', '#e74c3c');
-    rainbow.setNumberRange(.25, 1.75);
-    bins = new Collection(rawBins);
-    console.log(bins);
+    rainbow.setNumberRange(bins.pluck("e").min(), bins.pluck("e").max());
     stage = new Kinetic.Stage({
       container: "kinetic-wrapper",
-      width: 1000,
+      width: 1040,
       height: 750
     });
     layer = new Kinetic.Layer();
     layer.add(new Kinetic.Rect({
       x: 0,
       y: 0,
-      width: 1000,
+      width: 1040,
       height: 750
     }));
     bins.each(function(bin) {
-      var rect;
-      rect = new Kinetic.Rect({
-        x: bin.x * 20,
-        y: bin.y * 20,
-        width: 20,
-        height: 20,
-        fill: "#" + rainbow.colourAt(bin.p * bin.v)
+      var hex;
+      hex = new Kinetic.RegularPolygon({
+        sides: 6,
+        x: (function() {
+          var add;
+          add = -1 * (bin.y % 2) * App.binConfig.dim1size;
+          return add + (bin.x * App.binConfig.dim2size * 2);
+        })(),
+        y: (function() {
+          var add;
+          add = -.3 * bin.y * App.binConfig.dim2size;
+          return add + (bin.y * App.binConfig.dim2size * 2);
+        })(),
+        fill: "#" + rainbow.colourAt(bin.p * bin.v),
+        radius: App.binConfig.dim1size + 3,
+        stroke: "#333",
+        strokeWidth: 1,
+        scale: .5
       });
-      rect.binData = bin;
-      return layer.add(rect);
+      hex.binData = bin;
+      return layer.add(hex);
     });
     stage.add(layer);
     $output = $("<div id='output'>").appendTo("#kinetic-wrapper");
     return stage.on("mouseover", function(event) {
       var d;
       if ((d = event.target.binData)) {
-        $output.html("<h5>League Average:</h5><p><strong>" + ((d.p * 100).toFixed(2)) + "%</strong> on <strong>" + d.a + "</strong> total shots. <strong>" + ((d.p * d.v).toFixed(2)) + "</strong> expected points per shot.</p>");
+        $output.html("<h5>League Average:</h5><p><strong>" + ((d.p * 100).toFixed(2)) + "%</strong> on <strong>" + d.a + "</strong> total shots. <strong>" + (d.e.toFixed(2)) + "</strong> expected points per shot.</p>");
         return $output.css({
           opacity: 1,
           top: event.evt.clientY + 20,

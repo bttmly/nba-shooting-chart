@@ -1,8 +1,5 @@
 window.App or= {}
 
-retreived = 0
-dfdRoster = new $.Deferred
-
 ajaxSettings = 
   allTeams:
     url: "http://stats.nba.com/stats/leaguedashteamstats"
@@ -99,6 +96,36 @@ ajaxSettings =
       'pageNo': '1'
       'rowsPerPage':'0'
 
+  sportVu : 
+    [
+      url: "http://stats.nba.com/js/data/sportvu/speedData.js"
+      varName: "speedData"
+    ,
+      url: "http://stats.nba.com/js/data/sportvu/touchesData.js"
+      varName: "touchesData"
+    ,
+      url: "http://stats.nba.com/js/data/sportvu/passingData.js"
+      varName: "passingData"
+    ,
+      url: "http://stats.nba.com/js/data/sportvu/defenseData.js"
+      varName: "defenseData"
+    ,
+      url: "http://stats.nba.com/js/data/sportvu/reboundingData.js"
+      varName: "reboundingData"
+    ,
+      url: "http://stats.nba.com/js/data/sportvu/drivesData.js"
+      varName: "drivesData"
+    ,
+      url: "http://stats.nba.com/js/data/sportvu/catchShootData.js"
+      varName: "catchShootData"
+    ,
+      url: "http://stats.nba.com/js/data/sportvu/pullUpShootData.js"
+      varName: "pullUpShootData"
+    ,
+      url: "http://stats.nba.com/js/data/sportvu/shootingData.js"
+      varName: "shootingData"
+    ]
+
 ajaxFail = ( settings, req, status, err ) ->
   e = new Error "Ajax request to #{ settings.url } failed: #{ status }"
   e.status = status
@@ -106,8 +133,6 @@ ajaxFail = ( settings, req, status, err ) ->
   e.originalError = err
   e.ajaxSettings = settings
   throw e
-
-App.static or= {}
 
 App.ajax = 
 
@@ -128,8 +153,7 @@ App.ajax =
 
   getTeamPlayers : ( id ) ->
     settings = ajaxSettings.eachTeam
-
-    req = $.ajax
+    $.ajax
       type: "GET"
       url: settings.url
       data: $.extend {}, settings.data, { TeamID: id }
@@ -138,34 +162,14 @@ App.ajax =
     .fail ( req, status, err ) ->
       ajaxFail( settings, req, status, err )
     .then ( json ) ->
-
       players = App.util.collectify( json.resultSets[0].headers, json.resultSets[0].rowSet ).map ( t ) ->
         return App.util.cleanPropNames( t )
       return players 
-      
-      # retreived += 1
-      # if retreived is 30 
-      #   allPlayers = []
-      #   for team in App.league.teams
-      #     for player in team.players
-      #       allPlayers.push( player )
-      #   console.log allPlayers
-      #   App.league.allPlayers = new App.Players allPlayers
 
-        
-
-    #   resolve( rosters ) if rosters.length is teamIds.length
-
-    # resolve = ( rosters ) ->
-    #   deferred.resolve new Collection _.flatten( for roster in rosters
-    #     App.util.collectify( roster.resultSets[0].headers, roster.resultSets[0].rowSet )
-    #   ).map ( t ) ->
-    #     return App.util.cleanPropNames( t )      
-
-
-  getPlayerShots : ( id ) ->
+  getPlayerShots : ( player ) ->
     settings = ajaxSettings.shotChart
-
+    id = player.playerId
+    dfdPlayerShots = new $.Deferred
     $.ajax
       type: "GET"
       url: settings.url
@@ -175,8 +179,51 @@ App.ajax =
     .fail ( err ) ->
       ajaxFail( settings, req, status, err )
     .then ( json ) ->
-      shots = App.util.collectify( json.resultSets[0].headers, json.resultSets[0].rowSet ).map ( t ) ->
-        return App.util.cleanPropNames( t )
-      return shots 
+      worker = new Worker( "/scripts/binner.js" )
+      startMessage = 
+        "cmd": "start"
+        "msg":
+          "data" : json
+          "binOpts" : $.extend( {}, App.league.binDims, { threshold: 4 } )
+      worker.addEventListener 'message', ( event ) ->
+        if event.data.type is "result"
+          player.binnedShots = event.data.msg.bins
+          dfdPlayerShots.resolve( player )
+      , false
+      worker.postMessage( startMessage )
+    return dfdPlayerShots.promise()
+
+  getLeagueShots : ( league ) -> 
+    dfdLeagueShots = new $.Deferred
+    $.getJSON "/raw-shooting-data.json", ( json ) ->
+      startMessage =
+        cmd: "start",
+        msg:
+          data : json,
+          binOpts : App.binConfig
+      worker = new Worker( "scripts/binner.js" )
+      worker.addEventListener "message", ( event ) ->
+        if event.data.type is "result"
+          league.binnedShots = event.data.msg.bins
+          league.binDims = event.data.msg.dim
+          dfdLeagueShots.resolve( league )
+      , false
+      worker.postMessage( startMessage )
+    return dfdLeagueShots.promise()
+
+  getLeagueSportVuData : ->
+    dfd = new $.Deferred
+    App.sportVu = []
+    for set in ajaxSettings.sportVu
+      do ( set = set ) ->
+        $.getScript( set.url ).then ->
+          data = $.extend( {}, window[set.varName] )
+          window[set.varName] = undefined
+          App.sportVu.push( data )
+          if App.sportVu.length is ajaxSettings.sportVu.length
+            console.log "SportVu done!"
 
 
+
+    return dfd.promise()
+ 
