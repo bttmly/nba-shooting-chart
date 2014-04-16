@@ -6,7 +6,7 @@
     if (event.data.cmd === "stop") {
       return self.close();
     } else if (event.data.cmd === "start") {
-      importScripts("/bower_components/lodash/dist/lodash.min.js", "two-dim-arr.js");
+      importScripts("../bower_components/lodash/dist/lodash.min.js", "two-dim-arr.js");
       return dataToBins(event.data.msg);
     }
   });

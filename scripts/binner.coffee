@@ -7,7 +7,7 @@
 
     else if event.data.cmd is "start"
 
-      importScripts("/bower_components/lodash/dist/lodash.min.js", "two-dim-arr.js")
+      importScripts("../bower_components/lodash/dist/lodash.min.js", "two-dim-arr.js")
       dataToBins( event.data.msg )
 
   # shotChartAjax =
