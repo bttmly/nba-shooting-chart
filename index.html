@@ -137,26 +137,25 @@
         App.binConfig = { 
           dim1 : "x",
           dim2 : "y",
-          dim1size : 20,
-          dim2size : 20,
-          threshold : 80
-        }
+          dim1size : 10,
+          dim2size : 10,
+          threshold : 20
+        };
 
         App.league = new App.League();
 
         App.league.getLeagueSportVuData();
 
-        // App.league.getLeagueTeams().then( function( league ) {
-        //   league.teams.each( function( team ) {
-        //     team.getTeamPlayers()
-        //   });
-        // });
-
+        App.league.getLeagueTeams().then( function( league ) {
+          league.teams.each( function( team ) {
+            team.getTeamPlayers().then( App.fns.buildPlayerList() );
+          });
+        });
+      
         App.league.getLeagueShots().then( function( league ) {
-          league.drawLeagueShootingChart()
+          league.drawLeagueShootingChart();
         });
           
-
       </script>
 </body>
 </html>

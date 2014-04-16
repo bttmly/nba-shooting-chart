@@ -21,7 +21,6 @@ prototypeChain = ( obj ) ->
     chain.push( obj )
   return chain
 
-
 App.util = 
   camelize : camelize
   collectify : collectify

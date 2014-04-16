@@ -21,27 +21,16 @@
       height: 750
     }));
     bins.each(function(bin) {
-      var hex;
-      hex = new Kinetic.RegularPolygon({
-        sides: 6,
-        x: (function() {
-          var add;
-          add = -1 * (bin.y % 2) * App.binConfig.dim1size;
-          return add + (bin.x * App.binConfig.dim2size * 2);
-        })(),
-        y: (function() {
-          var add;
-          add = -.3 * bin.y * App.binConfig.dim2size;
-          return add + (bin.y * App.binConfig.dim2size * 2);
-        })(),
-        fill: "#" + rainbow.colourAt(bin.p * bin.v),
-        radius: App.binConfig.dim1size + 3,
-        stroke: "#333",
-        strokeWidth: 1,
-        scale: .5
+      var rect;
+      rect = new Kinetic.Rect({
+        x: bin.x * App.binConfig.dim2size * 2,
+        y: bin.y * App.binConfig.dim2size * 2,
+        width: App.binConfig.dim1size * 2,
+        height: App.binConfig.dim2size * 2,
+        fill: "#" + rainbow.colourAt(bin.p * bin.v)
       });
-      hex.binData = bin;
-      return layer.add(hex);
+      rect.binData = bin;
+      return layer.add(rect);
     });
     stage.add(layer);
     $output = $("<div id='output'>").appendTo("#kinetic-wrapper");
@@ -51,8 +40,8 @@
         $output.html("<h5>League Average:</h5><p><strong>" + ((d.p * 100).toFixed(2)) + "%</strong> on <strong>" + d.a + "</strong> total shots. <strong>" + (d.e.toFixed(2)) + "</strong> expected points per shot.</p>");
         return $output.css({
           opacity: 1,
-          top: event.evt.clientY + 20,
-          left: event.evt.clientX + 20
+          top: event.evt.clientY + 40,
+          left: event.evt.clientX + 40
         });
       } else {
         return $output.css({

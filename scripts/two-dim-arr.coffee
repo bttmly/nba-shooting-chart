@@ -22,13 +22,11 @@
               return value
         this.push arr
 
-    # Unlike vanilla Arrays, forEach is chainable.
     # Callback receives ( currentItem, rowIndex, columnIndex, 2dArray )
     forEach : ( callback ) ->
       for row, i in this
         for item, j in this[0]
           callback( item, i, j, this )
-      return this
 
     # An alias to forEach
     each : ->

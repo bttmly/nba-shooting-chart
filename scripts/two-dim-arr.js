@@ -41,16 +41,22 @@
     }
 
     TwoDimensionalArray.prototype.forEach = function(callback) {
-      var i, item, j, row, _i, _j, _len, _len1, _ref;
+      var i, item, j, row, _i, _len, _results;
+      _results = [];
       for (i = _i = 0, _len = this.length; _i < _len; i = ++_i) {
         row = this[i];
-        _ref = this[0];
-        for (j = _j = 0, _len1 = _ref.length; _j < _len1; j = ++_j) {
-          item = _ref[j];
-          callback(item, i, j, this);
-        }
+        _results.push((function() {
+          var _j, _len1, _ref, _results1;
+          _ref = this[0];
+          _results1 = [];
+          for (j = _j = 0, _len1 = _ref.length; _j < _len1; j = ++_j) {
+            item = _ref[j];
+            _results1.push(callback(item, i, j, this));
+          }
+          return _results1;
+        }).call(this));
       }
-      return this;
+      return _results;
     };
 
     TwoDimensionalArray.prototype.each = function() {

@@ -50,7 +50,6 @@
         'SeasonType': 'Regular Season',
         'LeagueID': '00',
         'TeamID': '0',
-        'PlayerID': '0',
         'GameID': '',
         'Outcome': '',
         'Location': '',
@@ -188,16 +187,15 @@
       });
     },
     getPlayerShots: function(player) {
-      var dfdPlayerShots, id, settings;
-      settings = ajaxSettings.shotChart;
-      id = player.playerId;
-      dfdPlayerShots = new $.Deferred;
+      var data, dfd;
+      data = $.extend({}, ajaxSettings.shotChart.data, {
+        PlayerID: player.playerId
+      });
+      dfd = new $.Deferred;
       $.ajax({
         type: "GET",
-        url: settings.url,
-        data: $.extend({}, settings.data, {
-          PlayerID: id
-        }),
+        url: ajaxSettings.shotChart.url,
+        data: data,
         contentType: "application/json",
         dataType: "jsonp"
       }).fail(function(err) {
@@ -217,17 +215,17 @@
         worker.addEventListener('message', function(event) {
           if (event.data.type === "result") {
             player.binnedShots = event.data.msg.bins;
-            return dfdPlayerShots.resolve(player);
+            return dfd.resolve(player);
           }
         }, false);
         return worker.postMessage(startMessage);
       });
-      return dfdPlayerShots.promise();
+      return dfd.promise();
     },
     getLeagueShots: function(league) {
       var dfdLeagueShots;
       dfdLeagueShots = new $.Deferred;
-      $.getJSON("/raw-shooting-data.json", function(json) {
+      $.getJSON("./data/raw-shooting-data.json", function(json) {
         var startMessage, worker;
         startMessage = {
           cmd: "start",
@@ -255,10 +253,8 @@
       _ref = ajaxSettings.sportVu;
       _fn = function(set) {
         return $.getScript(set.url).then(function() {
-          var data;
-          data = $.extend({}, window[set.varName]);
+          App.sportVu.push($.extend({}, window[set.varName]));
           window[set.varName] = void 0;
-          App.sportVu.push(data);
           if (App.sportVu.length === ajaxSettings.sportVu.length) {
             return console.log("SportVu done!");
           }

@@ -44,7 +44,6 @@ ajaxSettings =
       'SeasonType': 'Regular Season'
       'LeagueID': '00'
       'TeamID': '0'
-      'PlayerID': '0'
       'GameID': ''
       'Outcome': ''
       'Location': ''
@@ -166,18 +165,23 @@ App.ajax =
         return App.util.cleanPropNames( t )
       return players 
 
+
+
   getPlayerShots : ( player ) ->
-    settings = ajaxSettings.shotChart
-    id = player.playerId
-    dfdPlayerShots = new $.Deferred
+
+    data = $.extend( {}, ajaxSettings.shotChart.data, PlayerID: player.playerId )
+    dfd = new $.Deferred
+
     $.ajax
       type: "GET"
-      url: settings.url
-      data: $.extend {}, settings.data, { PlayerID: id }
+      url: ajaxSettings.shotChart.url
+      data: data
       contentType: "application/json"
       dataType: "jsonp"
+
     .fail ( err ) ->
       ajaxFail( settings, req, status, err )
+
     .then ( json ) ->
       worker = new Worker( "/scripts/binner.js" )
       startMessage = 
@@ -188,14 +192,17 @@ App.ajax =
       worker.addEventListener 'message', ( event ) ->
         if event.data.type is "result"
           player.binnedShots = event.data.msg.bins
-          dfdPlayerShots.resolve( player )
+          dfd.resolve( player )
       , false
       worker.postMessage( startMessage )
-    return dfdPlayerShots.promise()
+
+    return dfd.promise()
+
+
 
   getLeagueShots : ( league ) -> 
     dfdLeagueShots = new $.Deferred
-    $.getJSON "/raw-shooting-data.json", ( json ) ->
+    $.getJSON "./data/raw-shooting-data.json", ( json ) ->
       startMessage =
         cmd: "start",
         msg:
@@ -217,13 +224,10 @@ App.ajax =
     for set in ajaxSettings.sportVu
       do ( set = set ) ->
         $.getScript( set.url ).then ->
-          data = $.extend( {}, window[set.varName] )
+          App.sportVu.push $.extend( {}, window[set.varName] )
           window[set.varName] = undefined
-          App.sportVu.push( data )
           if App.sportVu.length is ajaxSettings.sportVu.length
             console.log "SportVu done!"
-
-
 
     return dfd.promise()
  
