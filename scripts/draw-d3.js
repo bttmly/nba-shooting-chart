@@ -3,7 +3,7 @@
   window.App || (window.App = {});
 
   App.drawD3 = function(shots) {
-    var binPct, binned, binnedInfo, countRange, counts, expPts, expPtsRange, height, hexRadius, hexagon, hexbin, rainbow, sizeScale, svg, threshold, width, xRange, xScale, xVals, yRange, yScale, yVals;
+    var binData, binPct, binned, binnedInfo, countRange, counts, expPts, expPtsRange, height, hexRadius, hexagon, hexbin, rainbow, sizeScale, svg, threshold, width, xRange, xScale, xVals, yRange, yScale, yVals;
     width = 1000;
     height = 940;
     hexRadius = 23;
@@ -13,7 +13,7 @@
     xRange = [xVals.min(), xVals.max()];
     yRange = [yVals.min(), yVals.max()];
     xScale = d3.scale.linear().domain(xRange).range([0, width]);
-    yScale = d3.scale.linear().domain([yRange[0], 940]).range([0, height * 2]);
+    yScale = d3.scale.linear().domain([yRange[0], height]).range([0, height * 2]);
     shots = shots.map(function(shot) {
       shot.scaledX = xScale(shot.x);
       shot.scaledY = yScale(shot.y);
@@ -39,12 +39,18 @@
     counts = _.pluck(binnedInfo, "l");
     countRange = [counts.min(), counts.max()];
     expPts = binnedInfo.filter(function(b) {
-      return b.l > 20;
+      return b.l > threshold;
     }).map(function(b) {
       return b.e;
     });
     expPtsRange = [expPts.min(), expPts.max()];
-    console.log(expPts);
+    console.log(binData = {
+      binned: binned,
+      binnedInfo: binnedInfo,
+      counts: counts,
+      countRange: countRange,
+      expPtsRange: expPtsRange
+    });
     rainbow = new Rainbow();
     rainbow.setSpectrum('#3498db', '#2ecc71', '#f1c40f', '#e67e22', '#e74c3c');
     rainbow.setNumberRange(expPtsRange[0], expPtsRange[1]);

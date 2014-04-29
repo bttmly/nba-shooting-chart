@@ -144,32 +144,6 @@
       <script src="scripts/ajax.js"></script>
       <script src="scripts/draw-chart.js"></script>
       <script src="scripts/draw-d3.js"></script>
-
-      <script>
-
-        App.binConfig = { 
-          dim1 : "x",
-          dim2 : "y",
-          dim1size : 10,
-          dim2size : 10,
-          threshold : 20
-        };
-
-        App.league = new App.League();
-
-        App.league.getLeagueSportVuData();
-
-        // App.league.getLeagueTeams().then( function( league ) {
-        //   league.teams.each( function( team ) {
-        //     team.getTeamPlayers().then( App.fns.buildPlayerList() );
-        //   });
-        // });
-      
-        App.league.getLeagueShots().then( function( league ) {
-          // league.drawLeagueShootingChart();
-          App.drawD3( league.unbinnedShots );
-        });
-          
-      </script>
+      <script src="scripts/init.js"></script>
 </body>
 </html>

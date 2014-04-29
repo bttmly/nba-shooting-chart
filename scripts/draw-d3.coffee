@@ -17,7 +17,7 @@ App.drawD3 = ( shots ) ->
     .range [0, width]
 
   yScale = d3.scale.linear()
-    .domain [yRange[0], 940]
+    .domain [yRange[0], height]
     .range [0, height * 2]
 
   shots = shots.map ( shot ) ->
@@ -45,13 +45,19 @@ App.drawD3 = ( shots ) ->
   countRange = [ counts.min(), counts.max() ]
 
   expPts = binnedInfo.filter ( b ) ->
-    b.l > 20
+    b.l > threshold
   .map ( b ) ->
     b.e
 
   expPtsRange = [ expPts.min(), expPts.max() ]
 
-  console.log expPts
+  console.log binData = {
+    binned: binned
+    binnedInfo: binnedInfo
+    counts: counts
+    countRange: countRange
+    expPtsRange: expPtsRange
+  }
 
   rainbow = new Rainbow()
   rainbow.setSpectrum('#3498db', '#2ecc71', '#f1c40f', '#e67e22', '#e74c3c')
