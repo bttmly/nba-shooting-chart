@@ -106,6 +106,7 @@
       type: "result",
       msg: {
         bins: minimalBins,
+        shots: cleanShooting,
         dim: binDim
       }
     };

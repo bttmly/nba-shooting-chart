@@ -11,16 +11,15 @@ App.fns =
           App.allPlayers.push( player )
       App.allPlayers = new Collection( App.allPlayers )
 
-      html = "<select id='player-select' class='player-select'>"
+      htmlStr = "<select id='player-select' class='player-select'>"
       App.allPlayers.each ( p ) ->
-        html += "<option value='#{ p.playerId }'>#{ p.name }</option>"
-      html += "</select>"
+        htmlStr += "<option value='#{ p.playerId }'>#{ p.name }</option>"
+      htmlStr += "</select>"
 
-      $select = $( html )
+      $select = $( htmlStr )
       .prependTo $ "body"
       .on "change", ( event ) ->
-        console.log this.value
-        player = App.allPlayers.findWhere( playerId : parseInt( this.value, 10 ) )
+        player = App.allPlayers.findWhere( playerId : +this.value )
         player.getPlayerShots().then ( player ) ->
           player.drawShootingChart()
 

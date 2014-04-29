@@ -4,7 +4,7 @@
 
   App.fns = {
     buildPlayerList: function() {
-      var $select, html, player, team, _i, _j, _len, _len1, _ref, _ref1;
+      var $select, htmlStr, player, team, _i, _j, _len, _len1, _ref, _ref1;
       if (App.league.teams.every("players")) {
         App.allPlayers = [];
         _ref = App.league.teams;
@@ -18,15 +18,14 @@
           }
         }
         App.allPlayers = new Collection(App.allPlayers);
-        html = "<select id='player-select' class='player-select'>";
+        htmlStr = "<select id='player-select' class='player-select'>";
         App.allPlayers.each(function(p) {
-          return html += "<option value='" + p.playerId + "'>" + p.name + "</option>";
+          return htmlStr += "<option value='" + p.playerId + "'>" + p.name + "</option>";
         });
-        html += "</select>";
-        return $select = $(html).prependTo($("body")).on("change", function(event) {
-          console.log(this.value);
+        htmlStr += "</select>";
+        return $select = $(htmlStr).prependTo($("body")).on("change", function(event) {
           player = App.allPlayers.findWhere({
-            playerId: parseInt(this.value, 10)
+            playerId: +this.value
           });
           return player.getPlayerShots().then(function(player) {
             return player.drawShootingChart();

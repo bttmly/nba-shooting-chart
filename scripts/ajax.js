@@ -198,7 +198,7 @@
         data: data,
         contentType: "application/json",
         dataType: "jsonp"
-      }).fail(function(err) {
+      }).fail(function(req, status, err) {
         return ajaxFail(settings, req, status, err);
       }).then(function(json) {
         var startMessage, worker;
@@ -223,9 +223,11 @@
       return dfd.promise();
     },
     getLeagueShots: function(league) {
-      var dfdLeagueShots;
-      dfdLeagueShots = new $.Deferred;
-      $.getJSON("./data/raw-shooting-data.json", function(json) {
+      var dfd;
+      dfd = new $.Deferred;
+      $.getJSON("./data/raw-shooting-data.json").fail(function(req, status, err) {
+        return ajaxFail(settings, req, status, err);
+      }).then(function(json) {
         var startMessage, worker;
         startMessage = {
           cmd: "start",
@@ -238,13 +240,14 @@
         worker.addEventListener("message", function(event) {
           if (event.data.type === "result") {
             league.binnedShots = event.data.msg.bins;
+            league.unbinnedShots = event.data.msg.shots;
             league.binDims = event.data.msg.dim;
-            return dfdLeagueShots.resolve(league);
+            return dfd.resolve(league);
           }
         }, false);
         return worker.postMessage(startMessage);
       });
-      return dfdLeagueShots.promise();
+      return dfd.promise();
     },
     getLeagueSportVuData: function() {
       var dfd, set, _fn, _i, _len, _ref;
@@ -256,7 +259,7 @@
           App.sportVu.push($.extend({}, window[set.varName]));
           window[set.varName] = void 0;
           if (App.sportVu.length === ajaxSettings.sportVu.length) {
-            return console.log("SportVu done!");
+            return dfd.resolve(App.sportVu);
           }
         });
       };

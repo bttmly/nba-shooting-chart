@@ -179,7 +179,7 @@ App.ajax =
       contentType: "application/json"
       dataType: "jsonp"
 
-    .fail ( err ) ->
+    .fail ( req, status, err ) ->
       ajaxFail( settings, req, status, err )
 
     .then ( json ) ->
@@ -201,8 +201,13 @@ App.ajax =
 
 
   getLeagueShots : ( league ) -> 
-    dfdLeagueShots = new $.Deferred
-    $.getJSON "./data/raw-shooting-data.json", ( json ) ->
+    dfd = new $.Deferred
+    $.getJSON "./data/raw-shooting-data.json"
+
+    .fail ( req, status, err ) ->
+      ajaxFail( settings, req, status, err )
+
+    .then ( json ) ->
       startMessage =
         cmd: "start",
         msg:
@@ -212,11 +217,13 @@ App.ajax =
       worker.addEventListener "message", ( event ) ->
         if event.data.type is "result"
           league.binnedShots = event.data.msg.bins
+          league.unbinnedShots = event.data.msg.shots
           league.binDims = event.data.msg.dim
-          dfdLeagueShots.resolve( league )
+          dfd.resolve( league )
       , false
       worker.postMessage( startMessage )
-    return dfdLeagueShots.promise()
+    
+    return dfd.promise()
 
   getLeagueSportVuData : ->
     dfd = new $.Deferred
@@ -227,7 +234,7 @@ App.ajax =
           App.sportVu.push $.extend( {}, window[set.varName] )
           window[set.varName] = undefined
           if App.sportVu.length is ajaxSettings.sportVu.length
-            console.log "SportVu done!"
+            dfd.resolve( App.sportVu )
 
     return dfd.promise()
  

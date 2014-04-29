@@ -2,7 +2,7 @@ window.App or= {}
 
 App.drawChart = ( rawBins ) ->
   bins = new Collection( rawBins )
-
+  
   rainbow = new Rainbow()
   rainbow.setSpectrum('#3498db', '#2ecc71', '#f1c40f', '#e67e22', '#e74c3c')
   rainbow.setNumberRange( bins.pluck("e").min(), bins.pluck("e").max() )

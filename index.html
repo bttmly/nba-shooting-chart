@@ -99,6 +99,18 @@
             margin: 0;
           }
 
+          .hexagon,
+          .hexagons > path {
+            fill: none;
+            stroke: #fff;
+            stroke-width: .5px;
+          }
+
+          .hexagons > path:hover {
+            stroke: #333;
+          }
+
+
         </style>
 
     </head>
@@ -106,31 +118,32 @@
       <!--[if lt IE 10]>
           <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
       <![endif]-->
-      <div id="kinetic-wrapper">
+<!--       <div id="kinetic-wrapper">
         <div id="output">
         </div>
       </div>
-      
+       -->
       <script src="bower_components/jquery/dist/jquery.min.js"></script>
       <script src="bower_components/lodash/dist/lodash.min.js"></script>
       <script src="bower_components/fabric/dist/fabric.min.js"></script>
       <script src="bower_components/collection.js/collection.js"></script>
       <script src="bower_components/q/release/2.0.0/q.min.js"></script>
+      <script src="bower_components/d3/d3.min.js"></script>
+
+      <!--
       <script src="bower_components/easeljs/lib/easeljs-0.7.1.min.js"></script>
       <script src="bower_components/kineticjs/kinetic.min.js"></script>
-
-      <script src="scripts/vendor/rainbow-vis.js"></script>
-      <!-- build:js({.tmp,app}) scripts/main.js -->
-      <!--
-      <script src="scripts/oops.js"></script>
-      <script src="scripts/main.js"></script>
-      <script src="scripts/lastSeasonShooting.js"></script>
       -->
+
+      <script src="scripts/vendor/d3.hexbin.js"></script>
+      <script src="scripts/vendor/rainbow-vis.js"></script>
+
       <script src="scripts/util.js"></script>
       <script src="scripts/fns.js"></script>
       <script src="scripts/models.js"></script>
       <script src="scripts/ajax.js"></script>
       <script src="scripts/draw-chart.js"></script>
+      <script src="scripts/draw-d3.js"></script>
 
       <script>
 
@@ -146,14 +159,15 @@
 
         App.league.getLeagueSportVuData();
 
-        App.league.getLeagueTeams().then( function( league ) {
-          league.teams.each( function( team ) {
-            team.getTeamPlayers().then( App.fns.buildPlayerList() );
-          });
-        });
+        // App.league.getLeagueTeams().then( function( league ) {
+        //   league.teams.each( function( team ) {
+        //     team.getTeamPlayers().then( App.fns.buildPlayerList() );
+        //   });
+        // });
       
         App.league.getLeagueShots().then( function( league ) {
-          league.drawLeagueShootingChart();
+          // league.drawLeagueShootingChart();
+          App.drawD3( league.unbinnedShots );
         });
           
       </script>
